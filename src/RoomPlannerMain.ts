@@ -1,12 +1,16 @@
-import { 
-    Scene, Engine, HemisphericLight, 
-    Vector3, ArcRotateCamera, Vector4, 
-    Mesh, MeshBuilder, StandardMaterial, 
-    Texture, ActionManager, AssetsManager, 
-    Axis, Color3, PBRMaterial, PointerDragBehavior, 
-    InstancedMesh } from "@babylonjs/core";
+//Corey Wunderlich 2022
+//https://www.wundervisionenvisionthefuture.com/
 
-import "@babylonjs/loaders";    
+import {
+    Scene, Engine, HemisphericLight,
+    Vector3, ArcRotateCamera, Vector4,
+    Mesh, MeshBuilder, StandardMaterial,
+    Texture, ActionManager, AssetsManager,
+    Axis, Color3, PBRMaterial, PointerDragBehavior,
+    InstancedMesh
+} from "@babylonjs/core";
+
+import "@babylonjs/loaders";
 
 export class RoomPlannerMain {
     private _scene: Scene;
@@ -31,7 +35,6 @@ export class RoomPlannerMain {
         this._camera.attachControl(this._canvas, true);
 
 
-
         var uvs = new Array(6);
         uvs[0] = new Vector4(0, 0, 0, 0);
         uvs[1] = new Vector4(0, 0, 0, 0);
@@ -40,12 +43,12 @@ export class RoomPlannerMain {
         uvs[4] = new Vector4(0, 0, 0, 0);
         uvs[5] = new Vector4(0, 0, 1, 1);
         const box = MeshBuilder.CreateBox("box", { width: 40, height: 30, depth: 30, faceUV: uvs, sideOrientation: Mesh.BACKSIDE }, this._scene);
-        const boxmat = new StandardMaterial("mat", this._scene);
-        const floortext = new Texture("/models/hardwood.jpg");
-        floortext.uScale = 8;
-        floortext.vScale = 8;
-        boxmat.diffuseTexture = floortext;
-        box.material = boxmat;
+        const box_material = new StandardMaterial("mat", this._scene);
+        const floor_texture = new Texture("/models/hardwood.jpg");
+        floor_texture.uScale = 8;
+        floor_texture.vScale = 8;
+        box_material.diffuseTexture = floor_texture;
+        box.material = box_material;
         box.position.y = 15;
 
 
@@ -57,18 +60,18 @@ export class RoomPlannerMain {
 
         this._asset_pool = new Map<string, Mesh>();
 
-        this._scene.onPointerDown = (e, pickResult) => {
+        this._scene.onPointerDown = (e, pick_result) => {
             if (e.button == 0) {
-                if (pickResult.pickedPoint != null && pickResult.pickedMesh?.name == "box") {
+                if (pick_result.pickedPoint != null && pick_result.pickedMesh?.name == "box") {
                     const base_asset: Mesh | undefined = this._asset_pool.get("clothedtable");
                     if (base_asset == undefined) { return; }
 
-                    let newmesh: InstancedMesh = base_asset.createInstance("table");//clone();
-                    newmesh.position.copyFrom(pickResult.pickedPoint);
-                    const objDragBehavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
-                    objDragBehavior.useObjectOrientationForDragging = false;
+                    const new_mesh: InstancedMesh = base_asset.createInstance("table");//clone();
+                    new_mesh.position.copyFrom(pick_result.pickedPoint);
+                    const obj_drag_behavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
+                    obj_drag_behavior.useObjectOrientationForDragging = false;
 
-                    newmesh.addBehavior(objDragBehavior);
+                    new_mesh.addBehavior(obj_drag_behavior);
                 }
                 //console.log(pickResult);
             }
@@ -105,24 +108,24 @@ export class RoomPlannerMain {
 
             merged.material = table_cloth_material;
             merged.scaling = new Vector3(0.0255, 0.0273, 0.0255);
-            let objDragBehavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
-            objDragBehavior.useObjectOrientationForDragging = false;
+            let obj_drag_behavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
+            obj_drag_behavior.useObjectOrientationForDragging = false;
             this._asset_pool.set("clothedtable", merged.clone());
             merged.setEnabled(false);
-            merged.addBehavior(objDragBehavior);
+            merged.addBehavior(obj_drag_behavior);
 
 
 
             let table2 = merged.clone();
-            objDragBehavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
-            objDragBehavior.useObjectOrientationForDragging = false;
+            obj_drag_behavior = new PointerDragBehavior({ dragPlaneNormal: Axis.Y });
+            obj_drag_behavior.useObjectOrientationForDragging = false;
             const red_cloth_material = new PBRMaterial("redcloth", this._scene);
             red_cloth_material.albedoColor = new Color3(1, 0.5, .5);
             red_cloth_material.roughness = 1;
             table2.material = red_cloth_material;
             table2.position.x = 3;
 
-            table2.addBehavior(objDragBehavior);
+            table2.addBehavior(obj_drag_behavior);
         }
 
         this._assets_manager.onFinish = (tasks) => {
