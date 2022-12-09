@@ -44,7 +44,7 @@ export class RoomPlannerMain {
         uvs[5] = new Vector4(0, 0, 1, 1);
         const box = MeshBuilder.CreateBox("box", { width: 40, height: 30, depth: 30, faceUV: uvs, sideOrientation: Mesh.BACKSIDE }, this._scene);
         const box_material = new StandardMaterial("mat", this._scene);
-        const floor_texture = new Texture("/models/hardwood.jpg");
+        const floor_texture = new Texture("./models/hardwood.jpg");
         floor_texture.uScale = 8;
         floor_texture.vScale = 8;
         box_material.diffuseTexture = floor_texture;
@@ -80,14 +80,14 @@ export class RoomPlannerMain {
 
 
         this._assets_manager = new AssetsManager(this._scene);
-        this._assets_manager.addMeshTask("tabletask", "", "/models/", "RoundTable.obj").onSuccess = (task) => {
+        this._assets_manager.addMeshTask("tabletask", "", "./models/", "RoundTable.obj").onSuccess = (task) => {
             task.loadedMeshes[0].name = "table";
             task.loadedMeshes[0].material = new StandardMaterial('table', this._scene);
             const table_material = new StandardMaterial("table", this._scene);
             table_material.diffuseColor = new Color3(.7, .5, .5);
             task.loadedMeshes[0].material = table_material;
         }
-        this._assets_manager.addMeshTask("flowertask", "", "/models/", "MagnoliaOBJ.obj").onSuccess = (task) => {
+        this._assets_manager.addMeshTask("flowertask", "", "./models/", "MagnoliaOBJ.obj").onSuccess = (task) => {
             let merged = Mesh.MergeMeshes(task.loadedMeshes as Mesh[], true, true);
             if (merged == null) { return; }
 
@@ -98,7 +98,7 @@ export class RoomPlannerMain {
             merged.position.y = .95;
         }
 
-        this._assets_manager.addMeshTask("tableclothtask", "", "/models/", "TableCloth.obj").onSuccess = (task) => {
+        this._assets_manager.addMeshTask("tableclothtask", "", "./models/", "TableCloth.obj").onSuccess = (task) => {
             let merged = Mesh.MergeMeshes(task.loadedMeshes as Mesh[], true, true);
             if (merged == null) { return; }
 
