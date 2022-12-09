@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>3D Room Planner</title>
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            canvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+
+            *{
+                box-sizing: border-box;
+            }
+            .sidebar-options{
+                display: flex;
+                flex-direction: column;
+                width: 250px;
+                background-color: blue;
+                height: 100%;
+                overflow-y: scroll;
+            }
+            .sidebar-options.closed{
+                display: none;
+            }
+            .sidebar-options h2{
+                margin: 0;
+                width: 100%;
+                text-align: center;
+                color: white;
+            }
+            .sidebar{
+                display: flex;
+                align-items: center;
+                background-color: red;
+                height: 100%;
+                width: 250px;
+                color: white;
+                font-weight: bold;
+            }
+            .sidebar > ul{
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .sidebar > ul > li{
+                display: block;
+                margin: 5px;
+                width: 200px;
+            }
+            .sidebar.closed{
+                width: 50px;
+                overflow: hidden;
+                word-break: keep-all;
+            }
+            /* li a{
+                display: flex;
+                align-items: center;
+                color: inherit;
+                text-decoration: none;
+            } */
+            .icon{
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                margin: 5px;
+            }
+            .icon.md{
+                width: 32px;
+                height: 32px;
+            }
+            .i-table{
+                background-image: url("images/table-icon.svg");
+            }
+            .i-color-pallete{
+                background-image: url("images/palette-icon.svg");
+            }
+            .main{
+                display: flex;
+                flex-direction: row;
+                height: 100%;
+            }
+            .btn{
+                display: flex;
+                align-items: center;
+                border: none;
+                outline: none;
+                background-repeat: no-repeat;
+                background-color: transparent;
+            }
+            .btn:hover{
+                cursor: pointer;
+                background-color: rgb(129, 129, 129);
+            }
+            .btn:active{
+                background-color: white;
+            }
+            .menu-btn{
+                color: white;
+                width: 100%;
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+            .menu-btn:hover{
+                background-color: rgb(83, 83, 255);
+                transition: background-color 0.5s;
+                
+            }
+            .menu-btn:active{
+                background-color: rgb(20, 172, 0);
+                transition: background-color 0.1s;
+            }
+            .close-btn{
+                justify-content: center;
+                color: black;
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+            .content{
+                background-color: yellow;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <!-- <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
+    </head>
+   <body>
+    <div class="main">
+        <div class="sidebar" style="display:none">
+            <ul>
+                <li><button data-header="Items" id="items-menu" class="btn menu-btn"><i class="icon md i-table"></i><span>Items</span></button></li>
+                <li><button data-header="Colors" id="color-menu" class="btn menu-btn"><i class="icon md i-color-pallete"></i><span>Color Scheme</span></button></li>
+                <!-- <li><a href="#Items"><i class="icon md i-table"></i><span>Items</span></a></li>
+                <li><a href="#Colors"><i class="icon md i-color-pallete"></i><span>Color Scheme</span></a></li> -->
+            </ul>
+        </div>
+        <div class="sidebar-options closed">
+            <button class="btn close-btn">X</button>
+            <h2></h2>
+            <ul>
+
+            </ul>
+        </div>
+        <div class="content">
+            <canvas id="roomPlannerCanvas" touch-action="none"></canvas> <!-- touch-action="none" for best results from PEP -->
+        </div>
+    </div>
+    <script src="/RoomPlanner.js"></script>
+    <script>
+        const roomplanner = new RoomPlanner.RoomPlannerMain("roomPlannerCanvas");
+    </script>
+   </body>
+</html>
